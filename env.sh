@@ -119,6 +119,12 @@ mk_config() {
     mk_backup "$CYBER_CONFIG"
     cp config.ini "$CYBER_CONFIG"
 
+    if test -f $CYBER_EYC/custom.ini; then
+        cat $CYBER_ETC/custom.ini >> $CYBER_CONFIG
+    else
+        touch $CYBER_ETC/custom.ini
+    fi
+    
     echo "Add public p2p addresses to CyberWay config"
 
     for ip in $(curl --silent $CYBER_LAUNCH_URL'/seednodes'); do
@@ -128,6 +134,11 @@ mk_config() {
     rm_surplus_backup "$CYBER_CONFIG"
 }
 
+merge_config() {
+    cp config.ini "$CYBER_CONFIG"
+    cat "$CYBER_ETC/custom.ini" >> "$CYBER_CONFIG"
+
+}
 
 cyberway_add_light_config() {
     mk_config
